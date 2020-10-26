@@ -60,6 +60,9 @@ nyc$dest <- as.factor(nyc$dest)
 # Re-check summary and str
 str(nyc)
 ```
+```{r}
+summary(nyc)
+```
 
 
 ### Data Exploration
@@ -91,7 +94,7 @@ The shortest NYC flight is `r shortest_nyc_flight` minutes
 - How many flights where there by United Airlines (code: UA) on Jan 12th 2013?
 
 ```{r}
-num_ua <- nrow(nyc[nyc$carrier == 'UA' & nyc$day == 12 & nyc$year == 1, ])
+num_ua <- nrow(nyc[nyc$carrier == 'UA' & nyc$day == 12 & nyc$month == 1, ])
 num_ua
 ```
 There were `r num_ua` flights by UA on Jan 13, 2013.
