@@ -104,11 +104,23 @@ There were `r num_ua` flights by UA on Jan 13, 2013.
 
 Lets focus on Arrival Delay.
 
-- What was the average arrival delay for all airports and all airlines combined in Jan 2013? 
+- What was the average arrival delay for all airports and all airlines combined in Jan 2013?
+```{r}
+average_delay_2013 <- mean(nyc$arr_delay & nyc$month == 1, na.rm=TRUE)
+average_delay_2013
+```
+The average delay for all airports and flights combined in 2013 was `r average_delay_2013` minutes.
 
 - Whats was the median arrival delay for all airports and all airlines combined in Jan 2013?
+```{r}
+median_delay_2013 <- median(nyc$arr_delay & nyc$month == 1, na.rm=TRUE)
+median_delay_2013
+```
+The median delay for all airports and flights combined in 2013 was `r median_delay_2013` minutes.
 
 Based on your answers to the two questions above, what can you say about the distribution of arrival delays? Provide your answer in a text paragraph form.
+
+With the median arrival delay being zero, we can see that most flights in January of 2013 had to no arrival delay. We can also use the smaller average arrival delay to see that most flights are usually on time or ony a few minutes late.
 
 
 ### Airline Performance
