@@ -143,35 +143,63 @@ barplot(arr_delay_by_airline)
 
 - Which airline has the highest average arrival delay? Which airline has the smallest average arrival delay? Are there airlines that actually have negative average delay? Provide answer to this question in a text paragraph form using **inline R code**.
 ```{r}
-arr_delay_by_airline <- data.frame(key=names(arr_delay_by_airline), value=arr_delay_by_airline)
+max_delay_airline <- names(arr_delay_by_airline[arr_delay_by_airline == max(arr_delay_by_airline)])
+min_delay_airline <- names(arr_delay_by_airline[arr_delay_by_airline == min(arr_delay_by_airline)])
 
 
-highest_avg <- head(arr_delay_by_airline, 1)[1,1]
-lowest_avg <- tail(arr_delay_by_airline, 1)[1, 1]
 
-highest_avg
-lowest_avg
+max_delay_airline
+min_delay_airline
 ```
 ```{r}
-negative_delay_times <- arr_delay_by_airline[arr_delay_by_airline[2] < 0, ]
+negative_delay_times <- names(arr_delay_by_airline[arr_delay_by_airline < 0])
 negative_delay_times
 ```
 
-The airline with the highest average delay is `r highest_avg`. The airline with the lowest average delay is `r lowest_avg`. The two airlines with negative average delay times are `r negative_delay_times[1,1]` and `r negative_delay_times[2,1]`.
+The airline with the highest average delay is `r max_delay_airline`. The airline with the lowest average delay is `r min_delay_airline`. The two airlines with negative average delay times are `r negative_delay_times[1]` and `r negative_delay_times[2]`.
 
 ### Air Gain
 
 Create a new column named airgain such that airgain = (departure delay - arrival delay) : this is the amount of delay a flight made up while in air.
+```{r}
+nyc$airgain <- nyc$dep_delay - nyc$arr_delay
+
+head(nyc$airgain)
+```
+
 
 a) Explore airgain data - calculate suitable descriptive statistics and appropriate graphics to better understand this data. This part is open ended - you do what you feel works best for you.
+```{r}
+airgain_mean <- mean(nyc$airgain, na.rm=TRUE)
+airgain_median <- median(nyc$airgain, na.rm=TRUE)
+airgain_sd <- sd(nyc$airgain, na.rm=TRUE)
+
+airgain_mean
+airgain_median
+airgain_sd
+```
+```{r}
+airgain_by_airline <- sort(round(tapply(nyc$airgain, nyc$carrier, mean, na.rm=TRUE), 2))
+airgain_by_airline
+```
+
+
 
 b) Answer the questions:
 
-  - do airlines actually gain any time when in air on average? 
+  - do airlines actually gain any time when in air on average?
+  
+  Yes, on average we see that flights gain about `r airgain_mean` minutes while in the air.
 
-  - Calculate average airgain for different airlines - which airlines do a better job, which do a worse job? 
+  - Calculate average airgain for different airlines - which airlines do a better job, which do a worse job?
+  
+  When we calculate the average airgain by airlines, we can see that it is in line with the delay times we       calculated above. The airline with the highest delay time was `r max_delay_airline`, and it also LOSES the     most time in the air, with a loss of `r airgain_by_airline[1]` minutes. The airlines with the most time        gained are also in line with what we calculated above. The two airlines with negative delay time were `r             negative_delay_times[1]` and `r negative_delay_times[2]`, which are also the top two airlines with time   gained during flight with minutes gained being `r airgain_by_airline[16]` and `r airgain_by_airline[15]`       respectively.
 
   - Build a graphic  of average airgain for different airlines sorted by airgain. We want to graphically visualize which airlines are good at "catching up" when in air and which airlines actually lose time further after taking off.
+```{r}
+barplot(airgain_by_airline)
+```
+  
 
 That's it. Once you are done, make sure everything works and knits well and then you can push your changes to the GitHub repo and uplaod the RMD flile and the html output to Canvas.
 
