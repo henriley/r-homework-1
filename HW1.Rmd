@@ -61,6 +61,7 @@ nyc$dest <- as.factor(nyc$dest)
 str(nyc)
 ```
 ```{r}
+#Check summary of CSV
 summary(nyc)
 ```
 
@@ -71,6 +72,7 @@ Let's first do some simple exploration of this data. I would like for you to ans
 
 - How many airlines are there? (Hint: `levels` and `length` can be useful here)
 ```{r}
+# Seeing the length of airlines vector
 num_airlines <- length(levels(nyc$carrier))
 num_airlines
 ```
@@ -78,6 +80,7 @@ There are `r num_airlines` airlines.
 
 - How many flights there were by the airline with code `OO`? (Hint: `nrow` can be useful here along with logical indexing)
 ```{r}
+# Seeing the number of rows in the OO carrier column
 num_oo <- nrow(nyc[nyc$carrier == 'OO', ])
 num_oo
 ```
@@ -86,6 +89,7 @@ The number of OO flights is `r num_oo` flights.
 - How long is the shortest flight out of any NYC airport? (Hint: `min` can be useful, remember to handle `NA` values)
 
 ```{r}
+# Seeing the the smallest air time value while removing NA values
 shortest_nyc_flight <- min(nyc$air_time, na.rm=TRUE)
 shortest_nyc_flight
 ```
@@ -94,6 +98,7 @@ The shortest NYC flight is `r shortest_nyc_flight` minutes
 - How many flights where there by United Airlines (code: UA) on Jan 12th 2013?
 
 ```{r}
+# Counting the number of rows for UA carrier on Jan 12th
 num_ua <- nrow(nyc[nyc$carrier == 'UA' & nyc$day == 12 & nyc$month == 1, ])
 num_ua
 ```
@@ -106,6 +111,7 @@ Lets focus on Arrival Delay.
 
 - What was the average arrival delay for all airports and all airlines combined in Jan 2013?
 ```{r}
+# Finding the average delay of all airlines in January
 average_delay_2013 <- mean(nyc$arr_delay & nyc$month == 1, na.rm=TRUE)
 average_delay_2013
 ```
@@ -113,6 +119,7 @@ The average delay for all airports and flights combined in 2013 was `r average_d
 
 - Whats was the median arrival delay for all airports and all airlines combined in Jan 2013?
 ```{r}
+# Finding the median delay of all airlines in January
 median_delay_2013 <- median(nyc$arr_delay & nyc$month == 1, na.rm=TRUE)
 median_delay_2013
 ```
@@ -129,29 +136,30 @@ Lets see if all airlines are equally terrible as far as flight arrival delays ar
 
 - Calculate average arrival delays by airline (Hint: look up the command `tapply`)
 ```{r}
+# Finding the average delay for each airline
 arr_delay_by_airline <- sort(round(tapply(nyc$arr_delay, nyc$carrier, mean, na.rm=TRUE), 2))
-
 arr_delay_by_airline
 ```
 
 
 - Draw a Bar Plot of Average Arrival Delays for all the Airlines (Hint: command for making a Bar Plot is simply `barplot`)
 ```{r}
+# Barplot for delay of each airline
 barplot(arr_delay_by_airline)
 ```
 
 
 - Which airline has the highest average arrival delay? Which airline has the smallest average arrival delay? Are there airlines that actually have negative average delay? Provide answer to this question in a text paragraph form using **inline R code**.
 ```{r}
+# Finding the airlines with the smallest and largest average delays
 max_delay_airline <- names(arr_delay_by_airline[arr_delay_by_airline == max(arr_delay_by_airline)])
 min_delay_airline <- names(arr_delay_by_airline[arr_delay_by_airline == min(arr_delay_by_airline)])
-
-
 
 max_delay_airline
 min_delay_airline
 ```
 ```{r}
+#Finding airlines with negative delay times
 negative_delay_times <- names(arr_delay_by_airline[arr_delay_by_airline < 0])
 negative_delay_times
 ```
@@ -162,6 +170,7 @@ The airline with the highest average delay is `r max_delay_airline`. The airline
 
 Create a new column named airgain such that airgain = (departure delay - arrival delay) : this is the amount of delay a flight made up while in air.
 ```{r}
+# Creating a new column to show time gained in air by flights
 nyc$airgain <- nyc$dep_delay - nyc$arr_delay
 
 head(nyc$airgain)
@@ -170,6 +179,7 @@ head(nyc$airgain)
 
 a) Explore airgain data - calculate suitable descriptive statistics and appropriate graphics to better understand this data. This part is open ended - you do what you feel works best for you.
 ```{r}
+# EDA of the new airgain column
 airgain_mean <- mean(nyc$airgain, na.rm=TRUE)
 airgain_median <- median(nyc$airgain, na.rm=TRUE)
 airgain_sd <- sd(nyc$airgain, na.rm=TRUE)
@@ -179,6 +189,7 @@ airgain_median
 airgain_sd
 ```
 ```{r}
+# Sorting the airgain column by carrier
 airgain_by_airline <- sort(round(tapply(nyc$airgain, nyc$carrier, mean, na.rm=TRUE), 2))
 airgain_by_airline
 ```
@@ -197,6 +208,7 @@ b) Answer the questions:
 
   - Build a graphic  of average airgain for different airlines sorted by airgain. We want to graphically visualize which airlines are good at "catching up" when in air and which airlines actually lose time further after taking off.
 ```{r}
+# Barplot of the airgain column
 barplot(airgain_by_airline)
 ```
   
